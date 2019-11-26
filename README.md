@@ -9,10 +9,12 @@
 
 4. Copy and Paste the scripts and click Save to execute the template  
 
-## STONITH Lab Scripts
+## STONITH Lab Scripts execution order
 
 /STONITH
 
 Step 1 : 01_CreateLinuxHANAVMs.json
+
+Please wait for the above scripts to be completed before the below step can be executed 
 
 Step 2 : 02_CreateWindowsJumpboxVM.json 
