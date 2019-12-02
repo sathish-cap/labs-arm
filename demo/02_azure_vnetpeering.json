@@ -1,0 +1,244 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {
+        "vNetName1": "[concat(resourceGroup().name, '-vnet1')]",
+        "vNetName2": "[concat(resourceGroup().name, '-vnet2')]",
+        "location": "[resourceGroup().location]",
+        "addressPrefix1": "10.0.0.0/16",
+        "addressPrefix2": "10.1.0.0/16",
+        "subnetName1": "[concat(resourceGroup().name, '-subnet1')]",
+        "subnetName2": "[concat(resourceGroup().name, '-subnet2')]",
+        "subnetAddressPrefix1": "10.0.0.0/24",
+        "subnetAddressPrefix2": "10.1.0.0/24",
+        "vmNamePrefix1": "hana-vm1",
+        "vmNamePrefix2": "hana-vm2",
+        "subNetRef1": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vNetName1'),variables('subnetName1'))]",
+        "subNetRef2": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vNetName2'),variables('subnetName2'))]",
+        "adminUsername": "dbadmin",
+        "adminPassword": "demoPassword1!",
+        "publicIPAddressType": "Dynamic",
+        "publisher": "Canonical",
+        "offer": "UbuntuServer",
+        "sku": "18.04-LTS",
+        "version": "latest",
+        "vmSize": "Standard_D2s_v3"
+    },
+    "resources": [
+        {
+            "comments": "VNet1 Automation",
+            "apiVersion": "2019-04-01",
+            "name": "[variables('vNetname1')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[variables('location')]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('addressPrefix1')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('subnetName1')]",
+                        "properties": {
+                            "addressPrefix": "[variables('subnetAddressPrefix1')]",
+                            "addressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "comments": "HANA-VM1-Automation",
+            "apiVersion": "2019-04-01",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[concat(variables('vmNamePrefix1'), '-pip1')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', variables('vNetName1'))]"
+            ],
+            "properties": {
+                "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
+            }
+        },
+        {
+            "apiVersion": "2018-04-01",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(variables('vmNamePrefix1'), '-nic1')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[variables('vNetName1')]",
+                "[concat('Microsoft.Network/publicIPAddresses/', concat(variables('vmNamePrefix1'), '-pip1'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmNamePrefix1'),'-pip1'))]"
+                            },
+                            "subnet": {
+                                "id": "[variables('subNetRef1')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "2018-10-01",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[concat(variables('vmNamePrefix1'))]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat(variables('vmNamePrefix1'), '-nic1')]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[variables('vmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[concat(variables('vmNamePrefix1'))]",
+                    "adminUsername": "[variables('adminUsername')]",
+                    "adminPassword": "[variables('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[variables('publisher')]",
+                        "offer": "[variables('offer')]",
+                        "sku": "[variables('sku')]",
+                        "version": "[variables('version')]"
+                    },
+                    "osDisk": {
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "StandardSSD_LRS"
+                        }
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmNamePrefix1'), '-nic1'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": false
+                    }
+                }
+            }
+        },
+        {
+            "comments": "VNet2 Automation",
+            "apiVersion": "2019-04-01",
+            "name": "[variables('vNetname2')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[variables('location')]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('addressPrefix2')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('subnetName2')]",
+                        "properties": {
+                            "addressPrefix": "[variables('subnetAddressPrefix2')]",
+                            "addressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "comments": "HANA-VM1-Automation",
+            "apiVersion": "2019-04-01",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[concat(variables('vmNamePrefix2'), '-pip2')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', variables('vNetName2'))]"
+            ],
+            "properties": {
+                "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
+            }
+        },
+        {
+            "apiVersion": "2018-04-01",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(variables('vmNamePrefix2'), '-nic2')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[variables('vNetName2')]",
+                "[concat('Microsoft.Network/publicIPAddresses/', concat(variables('vmNamePrefix2'), '-pip2'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmNamePrefix2'),'-pip2'))]"
+                            },
+                            "subnet": {
+                                "id": "[variables('subNetRef2')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "2018-10-01",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[concat(variables('vmNamePrefix2'))]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat(variables('vmNamePrefix2'), '-nic2')]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[variables('vmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[concat(variables('vmNamePrefix2'))]",
+                    "adminUsername": "[variables('adminUsername')]",
+                    "adminPassword": "[variables('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[variables('publisher')]",
+                        "offer": "[variables('offer')]",
+                        "sku": "[variables('sku')]",
+                        "version": "[variables('version')]"
+                    },
+                    "osDisk": {
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "StandardSSD_LRS"
+                        }
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmNamePrefix2'), '-nic2'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": false
+                    }
+                }
+            }
+        }
+    ]
+}
