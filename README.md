@@ -19,6 +19,17 @@ Please wait for the above scripts to be completed before the below step can be e
 
 Step 2 : 02_CreateWindowsJumpboxVM.json 
 
+## HANA Scaleout Lab Scripts execution order
+
+/SCALEOUT
+
+Step 1 : 01_CreateLinuxHANAVMs.json
+
+Please wait for the above scripts to be completed before the below step can be executed 
+
+Step 2 : 02_CreateWindowsJumpboxVM.json 
+
+
 ## DYNAMIC Tiering Lab Scripts execution order
 
 /DYNAMICTIERING
