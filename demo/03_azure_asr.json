@@ -1,0 +1,130 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {
+        "vNetName": "[concat(resourceGroup().name, '-vnet')]",
+        "location": "[resourceGroup().location]",
+        "addressPrefix": "10.0.0.0/16",
+        "subnetName": "[concat(resourceGroup().name, '-subnet')]",
+        "subnetAddressPrefix": "10.0.0.0/24",
+        "vmNamePrefix": "asr-vm1",
+        "subNetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vNetName'),variables('subnetName'))]",
+        "adminUsername": "dbadmin",
+        "adminPassword": "demoPassword1!",
+        "publicIPAddressType": "Dynamic",
+        "publisher": "MicrosoftWindowsServer",
+        "offer": "WindowsServer",
+        "sku": "2016-Datacenter",
+        "version": "latest",
+        "vmSize": "Standard_D8_v3"
+    },
+    "resources": [
+        {
+            "apiVersion": "2019-04-01",
+            "name": "[variables('vNetname')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[variables('location')]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('addressPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('subnetName')]",
+                        "properties": {
+                            "addressPrefix": "[variables('subnetAddressPrefix')]",
+                            "addressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "comments": "ASR VM Automation",
+            "apiVersion": "2019-04-01",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[concat(variables('vmNamePrefix'), '-pip')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', variables('vNetName'))]"
+            ],
+            "properties": {
+                "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
+            }
+        },
+        {
+            "apiVersion": "2018-04-01",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(variables('vmNamePrefix'), '-nic')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[variables('vNetName')]",
+                "[concat('Microsoft.Network/publicIPAddresses/', concat(variables('vmNamePrefix'), '-pip'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmNamePrefix'),'-pip'))]"
+                            },
+                            "subnet": {
+                                "id": "[variables('subNetRef')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "2018-10-01",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[concat(variables('vmNamePrefix'))]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat(variables('vmNamePrefix'), '-nic')]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[variables('vmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[concat(variables('vmNamePrefix'))]",
+                    "adminUsername": "[variables('adminUsername')]",
+                    "adminPassword": "[variables('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[variables('publisher')]",
+                        "offer": "[variables('offer')]",
+                        "sku": "[variables('sku')]",
+                        "version": "[variables('version')]"
+                    },
+                    "osDisk": {
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "StandardSSD_LRS"
+                        }
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmNamePrefix'), '-nic'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": false
+                    }
+                }
+            }
+        }
+    ]
+}
