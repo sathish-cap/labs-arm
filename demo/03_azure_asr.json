@@ -4,6 +4,8 @@
     "parameters": {},
     "variables": {
         "vNetName": "[concat(resourceGroup().name, '-vnet')]",
+        "nsgName": "[concat(resourceGroup().name, '-nsg')]",
+        "nsgId": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgName'))]",
         "location": "[resourceGroup().location]",
         "addressPrefix": "10.0.0.0/16",
         "subnetName": "[concat(resourceGroup().name, '-subnet')]",
@@ -21,10 +23,37 @@
     },
     "resources": [
         {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[variables('nsgName')]",
+            "location": "[variables('location')]",
+            "apiVersion": "2018-03-01",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "default-allow-rdp",
+                        "properties": {
+                            "description": "Allows RDP traffic",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3389",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
             "apiVersion": "2019-04-01",
             "name": "[variables('vNetname')]",
             "type": "Microsoft.Network/virtualNetworks",
             "location": "[variables('location')]",
+            "dependsOn": [
+                "[variables('nsgName')]"
+            ],
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
@@ -36,7 +65,9 @@
                         "name": "[variables('subnetName')]",
                         "properties": {
                             "addressPrefix": "[variables('subnetAddressPrefix')]",
-                            "addressPrefixes": []
+                            "networkSecurityGroup": {
+                                "id": "[variables('nsgId')]"
+                            }
                         }
                     }
                 ]
