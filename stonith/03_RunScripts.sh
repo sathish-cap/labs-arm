@@ -4,7 +4,7 @@ sudo sh SUSEConnect -r 4FFDCC436AEF3C -e naarayanaa.lk@paripoorna.in
 
 sudo sh SUSEConnect -p sle-module-public-cloud/12/x86_64
 
-sudo sh echo "root:demoPassword1!" | chpasswd
+sudo sh echo 'root:demoPassword1!' | chpasswd
 
 sudo sh cd /etc/ssh
 
