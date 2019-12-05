@@ -12,4 +12,4 @@ sudo sh sed -i '49 s/^#//' sshd_config
 
 sudo sh zypper update -y
 
-sudo sh ssh-keygen -t rsa -f /root/.ssh/id_rsa -q -P ""
+sudo sh ssh-keygen -t rsa -f /root/.ssh/id_rsa -q -P ''
