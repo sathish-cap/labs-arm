@@ -10,7 +10,7 @@
         "subnetAddressPrefix": "10.0.0.0/24",
         "avSetName": "s03-avset",
         "vmNamePrefix": "s03-db-",
-        "numberOfInstances": 1,
+        "numberOfInstances": 2,
         "subNetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets',variables('vNetName'),variables('subnetName'))]",
         "adminUsername": "dbadmin",
         "adminPassword": "demoPassword1!",
@@ -176,7 +176,7 @@
                             ]
                         },
                         "protectedSettings": {
-                            "commandToExecute": "[concat('sudo sh downloadshfiles.sh ',variables('location'))]"
+                            "commandToExecute": "[concat('sudo sh downloadshfiles.sh ', variables('location'))]"
                         }
                     }
                 }
