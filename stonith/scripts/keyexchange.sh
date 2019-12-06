@@ -1,4 +1,7 @@
 #!/bin/bash
 cd /root/.ssh/
-echo "yes \n" | ssh-copy-id -i id_rsa root@s03-db-0
-echo "yes \n" | ssh-copy-id -i id_rsa root@s03-db-1
+if [ "$HOSTNAME" = s03-db-0 ]; then
+    ssh-copy-id -i id_rsa root@s03-db-1
+else
+    ssh-copy-id -i id_rsa root@s03-db-0
+fi

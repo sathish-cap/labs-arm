@@ -152,7 +152,35 @@
                         "enabled": false
                     }
                 }
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-06-15",
+                    "type": "extensions",
+                    "name": "[concat('config-app-',copyindex())]",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', concat(variables('vmNamePrefix'),copyindex()))]"
+                    ],
+                    "tags": {
+                        "displayName": "[concat('config-app-',copyindex())]"
+                    },
+                    "properties": {
+                        "publisher": "Microsoft.Azure.Extensions",
+                        "type": "CustomScript",
+                        "typeHandlerVersion": "2.0",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris": [
+                                "https://raw.githubusercontent.com/sathish-cap/labs-arm/master/stonith/scripts/downloadshfiles.sh"
+                            ]
+                        },
+                        "protectedSettings": {
+                            "commandToExecute": "['sudo sh downloadshfiles.sh']"
+                        }
+                    }
+                }
+            ]
         }
     ]
 }
