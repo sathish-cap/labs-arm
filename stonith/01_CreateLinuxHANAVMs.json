@@ -21,7 +21,7 @@
         "version": "latest",
         "vmSize": "Standard_D8_v3",
         "dataDiskSize": "128",
-        "dataDisksCount": "1",
+        "dataDisksCount": 1,
         "diskType": "StandardSSD_LRS"
     },
     "resources": [
