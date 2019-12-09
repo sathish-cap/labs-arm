@@ -141,12 +141,12 @@
                             "name": "dataDisks",
                             "count": "[variables('dataDisksCount')]",
                             "input": {
-                                "name": "[concat(parameters('virtualMachineName'),'DataDisk',copyIndex('dataDisks'))]",
+                                "name": "[concat(variables('vmNamePrefix'),'DataDisk',copyIndex('dataDisks'))]",
                                 "diskSizeGB": "[variables('dataDiskSize')]",
                                 "lun": "[copyIndex('dataDisks')]",
                                 "createOption": "Empty",
                                 "managedDisk": {
-                                    "storageAccountType": "[parameters('diskType')]"
+                                    "storageAccountType": "[variables('diskType')]"
                                 }
                             }
                         }
