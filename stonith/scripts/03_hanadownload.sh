@@ -1,7 +1,5 @@
 #!/bin/sh
 #Location=
-mkdir /home/dbadmin/binaries
-mkdir /home/dbadmin/software
 if [ "$Location" = southindia ]; then
     mount -t cifs //others2019.file.core.windows.net/softwares /home/dbadmin/software -o vers=3.0,username=others2019,password=UzuOqP7UEjAwjNRlxsC9GI7vmjcFom5ib/misaSkAVBCJzVvUdb44R+5fKw6cMCFLf23EcTfnVW13WFwi8pCtQ==,dir_mode=0777,file_mode=0777,sec=ntlmssp
 else

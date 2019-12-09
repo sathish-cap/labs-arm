@@ -19,7 +19,10 @@
         "offer": "SLES-SAP-BYOS",
         "sku": "12-SP3",
         "version": "latest",
-        "vmSize": "Standard_D8_v3"
+        "vmSize": "Standard_D8_v3",
+        "dataDiskSize": "128",
+        "dataDisksCount": "1",
+        "diskType": "StandardSSD_LRS"
     },
     "resources": [
         {
@@ -133,6 +136,21 @@
                         "sku": "[variables('sku')]",
                         "version": "[variables('version')]"
                     },
+                    "copy": [
+                        {
+                            "name": "dataDisks",
+                            "count": "[variables('dataDisksCount')]",
+                            "input": {
+                                "name": "[concat(parameters('virtualMachineName'),'DataDisk',copyIndex('dataDisks'))]",
+                                "diskSizeGB": "[variables('dataDiskSize')]",
+                                "lun": "[copyIndex('dataDisks')]",
+                                "createOption": "Empty",
+                                "managedDisk": {
+                                    "storageAccountType": "[parameters('diskType')]"
+                                }
+                            }
+                        }
+                    ],
                     "osDisk": {
                         "createOption": "FromImage",
                         "managedDisk": {
