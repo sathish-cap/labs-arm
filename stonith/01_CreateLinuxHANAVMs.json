@@ -136,12 +136,17 @@
                         "sku": "[variables('sku')]",
                         "version": "[variables('version')]"
                     },
+                    "osDisk": {
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "StandardSSD_LRS"
+                        }
+                    },
                     "copy": [
                         {
-                            "name": "dataDisks",
+                            "name": "[concat(variables('vmNamePrefix'),'dd',copyIndex('dataDisks'))]",
                             "count": "[variables('dataDisksCount')]",
                             "input": {
-                                "name": "[concat(variables('vmNamePrefix'),'DataDisk',copyIndex('dataDisks'))]",
                                 "diskSizeGB": "[variables('dataDiskSize')]",
                                 "lun": "[copyIndex('dataDisks')]",
                                 "createOption": "Empty",
@@ -150,13 +155,7 @@
                                 }
                             }
                         }
-                    ],
-                    "osDisk": {
-                        "createOption": "FromImage",
-                        "managedDisk": {
-                            "storageAccountType": "StandardSSD_LRS"
-                        }
-                    }
+                    ]
                 },
                 "networkProfile": {
                     "networkInterfaces": [
