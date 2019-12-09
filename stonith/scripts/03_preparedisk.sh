@@ -19,19 +19,13 @@ else
 fi
 
 echo "n
-
 p
-
 1
 
+
 w" | fdisk /dev/sdc
-
 mkfs.ext4 /dev/sdc1
-
 mkdir /hana
-
 mount /dev/sdc1 /hana
-
 cd /
-
 sed -i -e "\$a/dev/sdc1       /hana   ext4    defaults        1 2" /etc/fstab
