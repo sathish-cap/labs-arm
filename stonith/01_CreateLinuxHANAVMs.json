@@ -144,7 +144,7 @@
                     },
                     "copy": [
                         {
-                            "name": "[concat(variables('vmNamePrefix'),'dd',copyIndex('dataDisks'))]",
+                            "name": "[concat(variables('vmNamePrefix'),copyindex(),'dd',copyIndex('dataDisks'))]",
                             "count": "[variables('dataDisksCount')]",
                             "input": {
                                 "diskSizeGB": "[variables('dataDiskSize')]",
