@@ -8,4 +8,5 @@ chmod 777 keyexchange.sh
 chmod 777 hanadownload.sh
 mkdir /home/dbadmin/binaries
 mkdir /home/dbadmin/software
-sed -i '2 s/^#Location=/Location=/'$1 hanadownload.sh
+mylocation=$1
+sed -i '2 s/^#Location=/Location='"${mylocation}"'/' hanadownload.sh
