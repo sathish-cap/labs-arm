@@ -1,7 +1,6 @@
 #!/bin/sh
+#Location=
 
-Location=$1
-​
 mkdir /home/dbadmin/binaries
 ​
 mkdir /home/dbadmin/software
