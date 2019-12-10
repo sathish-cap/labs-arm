@@ -4,12 +4,16 @@ wget 'https://raw.githubusercontent.com/sathish-cap/labs-arm/master/stonith/scri
 wget 'https://raw.githubusercontent.com/sathish-cap/labs-arm/master/stonith/scripts/02_keyexchange.sh'
 wget 'https://raw.githubusercontent.com/sathish-cap/labs-arm/master/stonith/scripts/03_preparedisk.sh'
 wget 'https://raw.githubusercontent.com/sathish-cap/labs-arm/master/stonith/scripts/04_copyhana.sh'
-wget 'https://raw.githubusercontent.com/sathish-cap/labs-arm/master/stonith/scripts/05_copyhanadatkey.sh'
+wget 'https://raw.githubusercontent.com/sathish-cap/labs-arm/master/stonith/scripts/05_hacluster.sh'
+wget 'https://raw.githubusercontent.com/sathish-cap/labs-arm/master/stonith/scripts/06_installhana.sh'
+wget 'https://raw.githubusercontent.com/sathish-cap/labs-arm/master/stonith/scripts/07_copyhanadatkey.sh'
 chmod +x 01_initialsetup.sh
 chmod +x 02_keyexchange.sh
 chmod +x 03_preparedisk.sh
 chmod +x 04_copyhana.sh
-chmod +x 05_copyhanadatkey.sh
+chmod +x 05_hacluster.sh
+chmod +x 06_installhana.sh
+chmod +x 07_copyhanadatkey.sh
 mkdir /home/dbadmin/binaries
 mkdir /home/dbadmin/software
 mylocation=$1

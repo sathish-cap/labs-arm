@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 SUSEConnect -r 4FFDCC436AEF3C -e naarayanaa.lk@paripoorna.in
 SUSEConnect -p sle-module-public-cloud/12/x86_64
 echo 'root:demoPassword1!' | chpasswd
