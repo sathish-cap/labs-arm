@@ -142,7 +142,35 @@
                         "enabled": false
                     }
                 }
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-06-15",
+                    "type": "extensions",
+                    "name": "config-app1",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', concat(variables('vmNamePrefixHANAMaster')))]"
+                    ],
+                    "tags": {
+                        "displayName": "config-app1"
+                    },
+                    "properties": {
+                        "publisher": "Microsoft.Azure.Extensions",
+                        "type": "CustomScript",
+                        "typeHandlerVersion": "2.0",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris": [
+                                "https://raw.githubusercontent.com/sathish-cap/labs-arm/master/scaleout/scripts/downloadshfiles.sh"
+                            ]
+                        },
+                        "protectedSettings": {
+                            "commandToExecute": "[concat('sudo sh downloadshfiles.sh ', variables('location'))]"
+                        }
+                    }
+                }
+            ]
         },
         {
             "comments": "HANA-WORKER-Automation",
@@ -230,7 +258,35 @@
                         "enabled": false
                     }
                 }
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-06-15",
+                    "type": "extensions",
+                    "name": "config-app2",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', concat(variables('vmNamePrefixHANAWorker')))]"
+                    ],
+                    "tags": {
+                        "displayName": "config-app2"
+                    },
+                    "properties": {
+                        "publisher": "Microsoft.Azure.Extensions",
+                        "type": "CustomScript",
+                        "typeHandlerVersion": "2.0",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris": [
+                                "https://raw.githubusercontent.com/sathish-cap/labs-arm/master/scaleout/scripts/downloadshfiles.sh"
+                            ]
+                        },
+                        "protectedSettings": {
+                            "commandToExecute": "[concat('sudo sh downloadshfiles.sh ', variables('location'))]"
+                        }
+                    }
+                }
+            ]
         },
         {
             "comments": "HANA-STANDBY-Automation",
@@ -318,7 +374,35 @@
                         "enabled": false
                     }
                 }
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-06-15",
+                    "type": "extensions",
+                    "name": "config-app3",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', concat(variables('vmNamePrefixHANAStandBy')))]"
+                    ],
+                    "tags": {
+                        "displayName": "config-app3"
+                    },
+                    "properties": {
+                        "publisher": "Microsoft.Azure.Extensions",
+                        "type": "CustomScript",
+                        "typeHandlerVersion": "2.0",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris": [
+                                "https://raw.githubusercontent.com/sathish-cap/labs-arm/master/scaleout/scripts/downloadshfiles.sh"
+                            ]
+                        },
+                        "protectedSettings": {
+                            "commandToExecute": "[concat('sudo sh downloadshfiles.sh ', variables('location'))]"
+                        }
+                    }
+                }
+            ]
         }
     ]
 }
