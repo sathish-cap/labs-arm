@@ -25,6 +25,3 @@ demoPassword1!
 demoPassword1!
 
 y" | ./hdblcm
-
-su - s03adm
-hdbnsutil -reconfig --hostnameResolution=global
