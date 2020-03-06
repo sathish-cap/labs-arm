@@ -1,5 +1,5 @@
 #!/bin/sh
-SUSEConnect -r 4FFDCC436AEF3C -e naarayanaa.lk@paripoorna.in
+SUSEConnect -r 30CC0C89D7E9C8 -e vidya@cloudalliancepartners.com
 SUSEConnect -p sle-module-public-cloud/12/x86_64
 echo 'root:demoPassword1!' | chpasswd
 zypper install sle-ha-release fence-agents -y
