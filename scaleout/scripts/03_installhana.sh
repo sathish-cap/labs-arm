@@ -1,5 +1,5 @@
 #!/bin/sh
-cd /home/dbadmin/binaries/DATA_UNITS/HDB_SERVER_LINUX_X86_64
+cd /home/dbadmin/binaries/HDB_SERVER_LINUX_X86_64
 echo "1
 2
 

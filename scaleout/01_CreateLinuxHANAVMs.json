@@ -18,7 +18,7 @@
         "publicIPAddressType": "Dynamic",
         "publisher": "SUSE",
         "offer": "SLES-SAP-BYOS",
-        "sku": "12-SP3",
+        "sku": "12-SP4",
         "version": "latest",
         "vmSize": "Standard_D8_v3"
     },
