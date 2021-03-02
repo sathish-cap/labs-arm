@@ -1,6 +1,5 @@
 #!/bin/bash
 #Location=
-SUSEConnect -r 321B7822C6A0357F -e psssuser5@gmail.com
 echo 'root:demoPassword1!' | chpasswd
 zypper update -y
 if [ "$Location" = southindia ]; then
