@@ -16,7 +16,7 @@
         "adminPassword": "demoPassword1!",
         "publicIPAddressType": "Dynamic",
         "publisher": "SUSE",
-        "offer": "SLES-SAP-BYOS",
+        "offer": "SLES-SAP",
         "sku": "12-SP4",
         "version": "latest",
         "vmSize": "Standard_D8_v3",
